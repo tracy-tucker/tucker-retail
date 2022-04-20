@@ -6,6 +6,8 @@ import {
   GoogleAuthProvider,
 } from "firebase/auth"; // creates these auth instances
 
+import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore"; // creates instance of Firebase DB
+
 const firebaseConfig = {
   apiKey: "AIzaSyAFNZ3GDYA7FWO1M4tvCqKrMz7l9j7p9eE",
   authDomain: "tucker-retail-db.firebaseapp.com",
@@ -26,3 +28,11 @@ provider.setCustomParameters({
 
 export const auth = getAuth();
 export const signInWitGooglehPopup = () => signInWithPopup(auth, provider);
+
+export const db = getFirestore(); //instantiates Firestore
+
+export const createUserDocumentFromAuth = async (userAuth) => {
+  const userDocRef = doc(db, "users", userAuth.uid);
+  // go insid the database, grab the 'users' collection and insert this user's authentication id
+  console.log(userDocRef);
+};
