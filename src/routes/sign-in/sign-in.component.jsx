@@ -7,7 +7,7 @@ const SignIn = () => {
   const logGoogleUser = async () => {
     const { user } = await signInWitGooglehPopup(); //destructuring the response ( {user} )
     console.log(user);
-    createUserDocumentFromAuth(user);
+    const userDocRef = await createUserDocumentFromAuth(user);
   };
   return (
     <div>
