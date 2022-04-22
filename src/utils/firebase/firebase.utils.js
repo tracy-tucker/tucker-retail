@@ -4,6 +4,7 @@ import {
   signInWithRedirect,
   signInWithPopup,
   GoogleAuthProvider,
+  createUserWithEmailAndPassword,
 } from "firebase/auth"; // creates these auth instances
 
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore"; // creates instance of Firebase DB
@@ -17,25 +18,36 @@ const firebaseConfig = {
   appId: "1:1078407535006:web:2560215056bb0641c71e8f",
 };
 
-// Initialize Firebase
+// Initialize Firebase //
 const firebaseApp = initializeApp(firebaseConfig);
 
-const provider = new GoogleAuthProvider();
+const googleProvider = new GoogleAuthProvider();
 
-provider.setCustomParameters({
+googleProvider.setCustomParameters({
   prompt: "select_account",
 });
 
 export const auth = getAuth();
-export const signInWitGooglehPopup = () => signInWithPopup(auth, provider);
+
+// ----- Sign-in with Google //
+export const signInWitGooglehPopup = () =>
+  signInWithPopup(auth, googleProvider);
+
+// ----- Sign-in with Google Redirect //
 export const signInWithGoogleRedirect = () =>
-  signInWithRedirect(auth, provider);
+  signInWithRedirect(auth, googleProvider);
 
-export const db = getFirestore(); //instantiates Firestore
+// ----- Instantiates Firestore //
+export const db = getFirestore();
 
-export const createUserDocumentFromAuth = async (userAuth) => {
+// ----- Take userAuth and create new user if user does not exist/return user
+export const createUserDocumentFromAuth = async (
+  userAuth,
+  additionalInfo = {}
+) => {
+  if (!userAuth) return;
+  // go inside the database, grab the 'users' collection and insert this user's authentication id
   const userDocRef = doc(db, "users", userAuth.uid);
-  // go insid the database, grab the 'users' collection and insert this user's authentication id
   console.log(userDocRef);
   const userSnapshot = await getDoc(userDocRef);
   console.log("user", userSnapshot.exists()); // in this moment, user does not exist (false)
@@ -50,12 +62,23 @@ export const createUserDocumentFromAuth = async (userAuth) => {
         displayName,
         email,
         createdAt,
+        ...additionalInfo,
       });
     } catch (error) {
-      console.log("error creating user", error);
+      if (error.code === "auth/email-already-in-use") {
+        alert("cannot create user, email already in use");
+      } else {
+        console.log("error creating user", error);
+      }
     }
   }
 
   // if true, return userDocRef
   return userDocRef;
+};
+
+// ----- Create user with email and password //
+export const createAuthUserWithEmailAndPassword = async (email, password) => {
+  if (!email || !password) return;
+  return await createUserWithEmailAndPassword(auth, email, password);
 };
