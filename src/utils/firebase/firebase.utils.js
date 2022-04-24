@@ -6,6 +6,7 @@ import {
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signOut,
 } from "firebase/auth"; // creates auth instances
 
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore"; // creates instance of Firebase DB
@@ -28,6 +29,7 @@ googleProvider.setCustomParameters({
   prompt: "select_account",
 });
 
+// auth keeps track of what users are currently signed in
 export const auth = getAuth();
 
 // ----- Sign-in with Google //
@@ -49,9 +51,8 @@ export const createUserDocumentFromAuth = async (
   if (!userAuth) return;
   // go inside the database, grab the 'users' collection and insert this user's authentication id
   const userDocRef = doc(db, "users", userAuth.uid);
-  console.log(userDocRef);
   const userSnapshot = await getDoc(userDocRef);
-  console.log("user", userSnapshot.exists()); // in this moment, user does not exist (false)
+  // console.log("user", userSnapshot.exists()); // in this moment, user does not exist (false)
   // check if user does NOT exist
   if (!userSnapshot.exists()) {
     // if false, create/setDoc for new user
@@ -66,11 +67,7 @@ export const createUserDocumentFromAuth = async (
         ...additionalInfo,
       });
     } catch (error) {
-      if (error.code === "auth/email-already-in-use") {
-        alert("cannot create user, email already in use");
-      } else {
-        console.log("error creating user", error);
-      }
+      console.log("error creating user", error.message);
     }
   }
 
@@ -89,3 +86,5 @@ export const signInAuthUserWithEmailAndPassword = async (email, password) => {
   if (!email || !password) return;
   return await signInWithEmailAndPassword(auth, email, password);
 };
+
+export const signOutUser = async () => await signOut(auth);

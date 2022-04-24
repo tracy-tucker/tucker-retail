@@ -1,9 +1,11 @@
 import "./sign-in-form.styles.scss";
 
-import { useState } from "react";
+import { useState, useContext } from "react";
 
 import FormInput from "../form-input/form-input.component";
 import Button from "../button/button.component";
+
+import { UserContext } from "../../contexts/user.context";
 
 import {
   signInWitGooglehPopup,
@@ -20,7 +22,7 @@ const SignInForm = () => {
   const [formFields, setformFields] = useState(defaultFormFields);
   const { email, password } = formFields;
 
-  console.log(formFields);
+  const { setCurrentUser } = useContext(UserContext);
 
   const resetFormFields = () => {
     setformFields(defaultFormFields);
@@ -37,12 +39,12 @@ const SignInForm = () => {
 
     try {
       // authenticate the user
-      const response = await signInAuthUserWithEmailAndPassword(
+      const { user } = await signInAuthUserWithEmailAndPassword(
         email,
         password
       );
-      console.log(response);
       resetFormFields();
+      setCurrentUser(user);
     } catch (error) {
       switch (error) {
         case "auth/wrong-password":
