@@ -1,10 +1,14 @@
 import "./sign-up-form.styles.scss";
+
 import { useState } from "react";
+
+import FormInput from "../form-input/form-input.component";
+import Button from "../button/button.component";
+
 import {
   createAuthUserWithEmailAndPassword,
   createUserDocumentFromAuth,
 } from "../../utils/firebase/firebase.utils";
-import FormInput from "../form-input/form-input.component";
 
 const defaultFormFields = {
   displayName: "",
@@ -30,17 +34,15 @@ const SignUpForm = () => {
       alert("Your password does not match");
       return;
     }
-    // did you authenticate the user?
     try {
+      // authenticate the user
       const { user } = createAuthUserWithEmailAndPassword(email, password);
-
+      // create a userdocument for this user
       await createUserDocumentFromAuth(user, { displayName });
       resetFormFields();
     } catch (error) {
-      console.error("Encountered and error", error);
+      console.error("Encountered an error", error);
     }
-    // create a userdocument for this user
-    // const userDocRef = createUserWithEmailAndPassword(formFields);
   };
 
   const handleChange = (e) => {
@@ -91,7 +93,7 @@ const SignUpForm = () => {
           required
         />
 
-        <button type="submit">Sign Up</button>
+        <Button type="submit">Sign Up</Button>
       </form>
     </div>
   );
