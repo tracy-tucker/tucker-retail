@@ -2,7 +2,7 @@ import { useState, useContext } from "react";
 
 import FormInput from "../form-input/form-input.component";
 import Button from "../button/button.component";
-import { UserContext } from "../../contexts/user.context";
+// import { UserContext } from "../../contexts/user.context";
 
 import {
   createAuthUserWithEmailAndPassword,
@@ -22,7 +22,8 @@ const SignUpForm = () => {
   const [formFields, setformFields] = useState(defaultFormFields);
   const { displayName, email, password, confirmPassword } = formFields;
 
-  const { setCurrentUser } = useContext(UserContext);
+  // no longer needed. Leveraging onAuthStateChanged instead
+  // const { setCurrentUser } = useContext(UserContext);
 
   const resetFormFields = () => {
     setformFields(defaultFormFields);
@@ -44,7 +45,8 @@ const SignUpForm = () => {
       // create a userdocument for this user
       await createUserDocumentFromAuth(user, { displayName });
       resetFormFields();
-      setCurrentUser(user);
+      // no longer needed. Leveraging onAuthStateChanged instead
+      // setCurrentUser(user);
     } catch (error) {
       if (error.code === "auth/email-already-in-use") {
         alert("Cannot create user, email already in use");

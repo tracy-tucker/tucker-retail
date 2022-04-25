@@ -1,11 +1,12 @@
 import "./sign-in-form.styles.scss";
 
-import { useState, useContext } from "react";
+import { useState } from "react";
 
 import FormInput from "../form-input/form-input.component";
 import Button from "../button/button.component";
 
-import { UserContext } from "../../contexts/user.context";
+// no longer needed. Leveraging onAuthStateChanged instead
+// import { UserContext } from "../../contexts/user.context";
 
 import {
   signInWitGooglehPopup,
@@ -22,7 +23,8 @@ const SignInForm = () => {
   const [formFields, setformFields] = useState(defaultFormFields);
   const { email, password } = formFields;
 
-  const { setCurrentUser } = useContext(UserContext);
+  // no longer needed. Leveraging onAuthStateChanged instead
+  // const { setCurrentUser } = useContext(UserContext);
 
   const resetFormFields = () => {
     setformFields(defaultFormFields);
@@ -30,8 +32,10 @@ const SignInForm = () => {
 
   // ----- Sign-in with Google //
   const signInWithGoogle = async () => {
-    const { user } = await signInWitGooglehPopup(); //destructuring the response ( {user} )
-    await createUserDocumentFromAuth(user);
+    await signInWitGooglehPopup();
+    // these are no longer needed. Performing this within onAuthStateChanged
+    // const { user } = await signInWitGooglehPopup(); //destructuring the response ( {user} )
+    // await createUserDocumentFromAuth(user);
   };
 
   const handleSubmit = async (event) => {
@@ -44,7 +48,8 @@ const SignInForm = () => {
         password
       );
       resetFormFields();
-      setCurrentUser(user);
+      // no longer needed. Leveraging onAuthStateChanged instead
+      // setCurrentUser(user);
     } catch (error) {
       switch (error) {
         case "auth/wrong-password":

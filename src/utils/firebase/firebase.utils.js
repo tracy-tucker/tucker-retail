@@ -7,6 +7,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  onAuthStateChanged,
 } from "firebase/auth"; // creates auth instances
 
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore"; // creates instance of Firebase DB
@@ -29,7 +30,7 @@ googleProvider.setCustomParameters({
   prompt: "select_account",
 });
 
-// auth keeps track of what users are currently signed in
+// auth keeps track if users are currently signed in/out
 export const auth = getAuth();
 
 // ----- Sign-in with Google //
@@ -88,3 +89,8 @@ export const signInAuthUserWithEmailAndPassword = async (email, password) => {
 };
 
 export const signOutUser = async () => await signOut(auth);
+
+export const onAuthStateChangedListener = (callback) =>
+  onAuthStateChanged(auth, callback);
+//onAuthStateChanged --> a Firebase listener that will trigger an event, depending on the change of state
+// it take in 2 parameters: auth, and a callback function you want to call every time the state changes
