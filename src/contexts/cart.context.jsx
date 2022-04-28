@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 
 const addCartItem = (cartItems, productToAdd) => {
   // does cartItems contain productToAdd?
@@ -29,11 +29,22 @@ export const CartContext = createContext({
   setIsCartOpen: () => {},
   cartItems: [],
   addItemToCart: () => {},
+  cartCount: 0,
 });
 
 export const CartProvider = ({ children }) => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [cartItems, setCartItems] = useState([]);
+  const [cartCount, setCartCount] = useState([]);
+
+  // setting the cartCount for cart-icon component
+  useEffect(() => {
+    const newCartCount = cartItems.reduce(
+      (total, cartItem) => total + cartItem.quantity,
+      0
+    );
+    setCartCount(newCartCount);
+  }, [cartItems]);
 
   // setCartItem with new information from addCartItem
   const addItemToCart = (productToAdd) => {
@@ -41,7 +52,13 @@ export const CartProvider = ({ children }) => {
   };
 
   // including addItemToCart and CartItems to trigger product onClick handler
-  const value = { isCartOpen, setIsCartOpen, addItemToCart, cartItems };
+  const value = {
+    isCartOpen,
+    setIsCartOpen,
+    addItemToCart,
+    cartItems,
+    cartCount,
+  };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 };
