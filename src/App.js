@@ -10,7 +10,7 @@ const App = () => {
     <Routes>
       <Route path="/" element={<Navigation />}>
         <Route index element={<Home />} />
-        <Route path="shop" element={<Shop />} />
+        <Route path="shop/*" element={<Shop />} />
         <Route path="checkout" element={<Checkout />} />
         <Route path="auth" element={<Authentication />} />
       </Route>
@@ -19,3 +19,6 @@ const App = () => {
 };
 
 export default App;
+
+// * --> no matter what the trailing path is, the Shop component needs to render
+// Shop comp will have its own routes inside that comp.
