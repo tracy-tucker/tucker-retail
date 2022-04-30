@@ -10,7 +10,16 @@ import {
   onAuthStateChanged,
 } from "firebase/auth"; // creates auth instances
 
-import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore"; // creates instance of Firebase DB
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  collection,
+  writeBatch,
+  query,
+  getDocs,
+} from "firebase/firestore"; // creates instance of Firebase DB
 
 const firebaseConfig = {
   apiKey: "AIzaSyAFNZ3GDYA7FWO1M4tvCqKrMz7l9j7p9eE",
@@ -43,6 +52,41 @@ export const signInWithGoogleRedirect = () =>
 
 // ----- Instantiates Firestore //
 export const db = getFirestore();
+
+// ----- THIS PROCESS was to create a collection based on the SHOP_DATA data inside our project
+// a method to upload our categories as collections inside FB
+// collectionKey = the identity of the collection (ex: clothes, users, etc)
+// objects = the documents we want to add
+// export const addCollectionAndDocuments = async (
+//   collectionKey,
+//   objectsToAdd
+// ) => {
+//   const collectionRef = collection(db, collectionKey);
+//   const batch = writeBatch(db);
+
+//   objectsToAdd.forEach((object) => {
+//     const docRef = doc(collectionRef, object.title.toLowerCase());
+//     batch.set(docRef, object);
+//   });
+
+//   await batch.commit();
+//   console.log("done");
+// };
+
+export const getCategoriesAndDocuments = async () => {
+  const collectionRef = collection(db, "categories");
+  const q = query(collectionRef);
+  const querySnapshot = await getDocs(q);
+
+  // docs will now be an array of the data from FB
+  // b/c docs is an array, we have to reduce down to an object
+  const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
+    const { title, items } = docSnapshot.data();
+    acc[title.toLowerCase()] = items;
+    return acc;
+  }, {});
+  return categoryMap;
+};
 
 // ----- Take userAuth and create new user if user does not exist/return user
 export const createUserDocumentFromAuth = async (
