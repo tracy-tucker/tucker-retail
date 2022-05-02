@@ -30,4 +30,4 @@ const Category = () => {
 
 export default Category;
 
-// products && ... --> is is a fail-safe. It will only render the comp is products are present
+// products && ... --> is is a fail-safe. It will only render the comp if products are present
