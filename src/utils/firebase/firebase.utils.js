@@ -16,7 +16,7 @@ import {
   getDoc,
   setDoc,
   collection,
-  writeBatch,
+  // writeBatch,
   query,
   getDocs,
 } from "firebase/firestore"; // creates instance of Firebase DB
@@ -76,16 +76,9 @@ export const db = getFirestore();
 export const getCategoriesAndDocuments = async () => {
   const collectionRef = collection(db, "categories");
   const q = query(collectionRef);
-  const querySnapshot = await getDocs(q);
 
-  // docs will now be an array of the data from FB
-  // b/c docs is an array, we have to reduce down to an object
-  const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
-    const { title, items } = docSnapshot.data();
-    acc[title.toLowerCase()] = items;
-    return acc;
-  }, {});
-  return categoryMap;
+  const querySnapshot = await getDocs(q);
+  return querySnapshot.docs.map((docSnapshot) => docSnapshot.data());
 };
 
 // ----- Take userAuth and create new user if user does not exist/return user
