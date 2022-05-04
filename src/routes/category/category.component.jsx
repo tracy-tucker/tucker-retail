@@ -1,12 +1,17 @@
 import { CategoryContainer, CategoryTitle } from "./category.styles";
 import { useContext, useState, useEffect, Fragment } from "react";
 import { useParams } from "react-router-dom";
-import { CategoriesContext } from "../../contexts/categories.context";
+
+import { useSelector } from "react-redux";
+import { selectCategoriesMap } from "../../store/categories/categoryselector";
+
+// import { CategoriesContext } from "../../contexts/categories.context";
 import ProductCard from "../../components/product-card/product-card.component";
 
 const Category = () => {
   const { category } = useParams();
-  const { categoriesMap } = useContext(CategoriesContext);
+  const categoriesMap = useSelector(selectCategoriesMap);
+  // const { categoriesMap } = useContext(CategoriesContext);
   // fetching products is an asynchronous function inside category context
   // instead of passing useState an empty array, we need to pass in a fail-safe
   const [products, setProducts] = useState(categoriesMap[category]);
