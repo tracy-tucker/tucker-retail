@@ -1,10 +1,15 @@
 import { Fragment, useContext } from "react";
 import { Outlet } from "react-router-dom";
 
+// This hook allows us to grab state info from Redux store
+import { useSelector } from "react-redux";
+
+import { selectCurrentUser } from "../../store/user/user.selector";
+
 import CartIcon from "../../components/cart-icon/cart-icon.component";
 import CartDropdown from "../../components/cart-dropdown/cart-dropdown.component";
 
-import { UserContext } from "../../contexts/user.context";
+// import { UserContext } from "../../contexts/user.context";
 import { CartContext } from "../../contexts/cart.context";
 
 import { ReactComponent as Logo } from "../../assets/logo.svg";
@@ -20,13 +25,14 @@ import {
 const Navigation = () => {
   // setCurrentUser no longer needed. Leveraging onAuthStateChanged instead
   // currentUser still needed for sign in/sign out toggle
-  const { currentUser, setCurrentUser } = useContext(UserContext);
+  // const { currentUser, setCurrentUser } = useContext(UserContext);
+  const currentUser = useSelector(selectCurrentUser);
   const { isCartOpen } = useContext(CartContext);
 
   // no longer needed. Leveraging onAuthStateChanged instead
   const signOutHandler = async () => {
     await signOutUser();
-    setCurrentUser(null);
+    // setCurrentUser(null);
   };
 
   return (
