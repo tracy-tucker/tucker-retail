@@ -20,14 +20,14 @@ import {
 const Navigation = () => {
   // setCurrentUser no longer needed. Leveraging onAuthStateChanged instead
   // currentUser still needed for sign in/sign out toggle
-  const { currentUser } = useContext(UserContext);
+  const { currentUser, setCurrentUser } = useContext(UserContext);
   const { isCartOpen } = useContext(CartContext);
 
   // no longer needed. Leveraging onAuthStateChanged instead
-  // const signOutHandler = async () => {
-  //   await signOutUser();
-  //   setCurrentUser(null);
-  // };
+  const signOutHandler = async () => {
+    await signOutUser();
+    setCurrentUser(null);
+  };
 
   return (
     <Fragment>
@@ -39,7 +39,7 @@ const Navigation = () => {
           <NavLink to="/shop">SHOP</NavLink>
 
           {currentUser ? (
-            <NavLink as="span" onClick={() => signOutUser}>
+            <NavLink as="span" onClick={signOutHandler}>
               SIGN OUT
             </NavLink>
           ) : (
