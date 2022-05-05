@@ -6,7 +6,7 @@ import "./index.scss";
 import App from "./App";
 // import { UserProvider } from "./contexts/user.context";
 // import { CategoriesProvider } from "./contexts/categories.context";
-import { CartProvider } from "./contexts/cart.context";
+// import { CartProvider } from "./contexts/cart.context";
 import reportWebVitals from "./reportWebVitals";
 import { store } from "./store/store";
 
@@ -17,9 +17,9 @@ root.render(
       <Router>
         {/* <UserProvider> */}
         {/* <CategoriesProvider> */}
-        <CartProvider>
-          <App />
-        </CartProvider>
+        {/* <CartProvider> */}
+        <App />
+        {/* </CartProvider> */}
         {/* </CategoriesProvider> */}
         {/* </UserProvider> */}
       </Router>
